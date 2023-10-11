@@ -10,7 +10,7 @@ function App() {
 				className='flex-row-reverse	'
 			>
 				<h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-					<p>Noteworthy technology acquisitions 2021
+					<p>content
 					</p>
 				</h5>
 			</Card>

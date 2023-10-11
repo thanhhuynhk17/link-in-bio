@@ -1,22 +1,50 @@
 const router = require("express").Router();
 const Profile = require("../models/Profile");
 
-router.get("/profiles", async (req, res) => {
-    const profiles = await Profile.find();
-    res.json(profiles);
+// get profile(s)
+router.get("/:id?", async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log(id);
+        let profiles = undefined;
+        if (!id) {
+            profiles = await Profile.find();
+        }else{
+            profiles = await Profile.findById(id);
+        }
+        res.json(profiles);
+    }catch (error) {
+        console.log('GET error: ', error);
+        res.sendStatus(500);
+    }
 });
 
-router.post("/profiles", async (req, res) => {
+// add new profile
+router.post("/", async (req, res) => {
+    console.log(req.body);
     const newProfile = new Profile({
-        text: req.body.text,
+        ...req.body
     });
     const savedProfile = await newProfile.save();
     res.json(savedProfile);
 });
 
-router.delete("/profiles/:id", async (req, res) => {
-    await Profile.findByIdAndDelete(req.params.id);
-    res.end();
+// modify profile
+router.put("/:id", async (req, res)=>{
+    try {
+        const {id} = req.params.id;
+    } catch (error) {
+        console.log('PUT error: ', error);
+        res.sendStatus(500);
+    }
+})
+
+// delete profile by id
+router.delete("/:id", async (req, res) => {
+    const result = await Profile.findByIdAndDelete(req.params.id);
+    res.json({
+        "msg": result
+    });
 });
 
 module.exports = router;
